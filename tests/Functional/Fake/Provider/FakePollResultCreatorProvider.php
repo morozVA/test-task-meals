@@ -15,7 +15,7 @@ class FakePollResultCreatorProvider implements PollResultCreatorProviderInterfac
     public function createPollResult(int $poleResultId, Poll $poll, Employee $employee, Dish $dish, int $employeeFloor): PollResult
     {
         return new PollResult(
-            1,
+            $poleResultId,
             $poll,
             $employee,
             $dish,
