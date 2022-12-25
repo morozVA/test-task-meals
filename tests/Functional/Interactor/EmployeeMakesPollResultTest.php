@@ -7,6 +7,7 @@ namespace tests\Meals\Functional\Interactor;
 use DateTime;
 use Meals\Application\Component\Validator\Exception\AccessDeniedException;
 use Meals\Application\Component\Validator\Exception\MenuDoesNotContainDishException;
+use Meals\Application\Component\Validator\Exception\PollIsNotActiveException;
 use Meals\Application\Component\Validator\Exception\PollResultIsNotAvailableException;
 use Meals\Application\Feature\PollResult\UseCase\EmployeeMakesPollResult\Interactor;
 use Meals\Domain\Dish\Dish;
@@ -39,6 +40,15 @@ class EmployeeMakesPollResultTest extends FunctionalTestCase
         $dateTime = (new DateTime('26.12.2022 12:00:00'))->format('d.m.Y H:i:s');
         $pollResult = $this->performTestMethod($this->getEmployeeWithPermissions(), $this->getPoll(true), $this->getDish(), $dateTime);
         verify($pollResult)->equals($pollResult);
+    }
+
+    public function testPollIsNotActive()
+    {
+        $this->expectException(PollIsNotActiveException::class);
+
+        $dateTime = (new DateTime('26.12.2022 12:00:00'))->format('d.m.Y H:i:s');
+        $poll = $this->performTestMethod($this->getEmployeeWithPermissions(), $this->getPoll(false), $this->getDish(), $dateTime);
+        verify($poll)->equals($poll);
     }
 
     public function testUserHasNotPermissions()

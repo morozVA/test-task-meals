@@ -10,6 +10,7 @@ use Meals\Application\Component\Provider\PollProviderInterface;
 use Meals\Application\Component\Provider\PollResultCreatorProviderInterface;
 use Meals\Application\Component\Validator\Exception\UserHasAccessToParticipateInPollsValidator;
 use Meals\Application\Component\Validator\MenuContainsDishValidator;
+use Meals\Application\Component\Validator\PollIsActiveValidator;
 use Meals\Application\Component\Validator\PollResultAvailableValidator;
 use Meals\Domain\Poll\PollResult;
 
@@ -23,6 +24,7 @@ class Interactor
         private PollResultAvailableValidator               $pollResultAvailableValidator,
         private MenuContainsDishValidator                  $menuContainsDishValidator,
         private UserHasAccessToParticipateInPollsValidator $userHasAccessToParticipateInPollsValidator,
+        private PollIsActiveValidator                      $pollIsActiveValidator,
     )
     {
     }
@@ -33,6 +35,7 @@ class Interactor
         $poll = $this->pollProvider->getPoll($pollId);
         $dish = $this->dishProvider->getDish($dishId);
 
+        $this->pollIsActiveValidator->validate($poll);
         $this->userHasAccessToParticipateInPollsValidator->validate($employee->getUser());
         $this->menuContainsDishValidator->validate($poll->getMenu(), $dish);
         $this->pollResultAvailableValidator->validate($dateTime);
