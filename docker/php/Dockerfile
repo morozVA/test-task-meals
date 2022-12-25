@@ -8,7 +8,8 @@ RUN apk add --no-cache --virtual .build-deps \
     libtool \
     libzip-dev \
     icu-dev \
-    zlib-dev
+    zlib-dev \
+    linux-headers
 
 # Install PECL and PEAR extensions
 RUN pecl install \
